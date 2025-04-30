@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>JTSC Awards Banquet</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -19,6 +19,12 @@
     input[type="number"] { width: 60px; padding: 4px; }
     button { background-color: #7D2248; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
     button:hover { background-color: #5a1735; }
+    .table-wrapper { overflow-x: auto; }
+    @media screen and (max-width: 768px) {
+      table, thead, tbody, th, td, tr { font-size: 14px; }
+      input[type="number"] { width: 50px; }
+    }
+
   </style>
 </head>
 <body>
@@ -34,6 +40,7 @@
     <button onclick="addGuest()">Submit</button>
   </div>
   <input type="text" id="search" placeholder="Search by swimmer name..." onkeyup="searchTable()">
+  <div class="table-wrapper">
   <table>
     <thead>
       <tr>
@@ -47,7 +54,7 @@
     </thead>
     <tbody id="table-body"></tbody>
   </table>
-
+  </div>
   <script>
     const API_BASE = "";
 
@@ -66,7 +73,7 @@
             tr.innerHTML = `
               <td>${row.name}</td>
               <td>${row.email}</td>
-              <td><input type="number" value="${row.attendees}" onchange="updateAttendee('${row.email}', 'attendees', this.value)"></td>
+              <td>${row.attendees}</td>
               <td>${row.allergy}</td>
               <td><input type="number" value="${row.checked_in_count}" onchange="updateAttendee('${row.email}', 'checked_in_count', this.value)"></td>
               <td><button onclick="toggleCheckIn(this, '${row.email}', '${row.name}', ${row.checked_in_count})">${row.checked_in === "yes" ? "Uncheck" : "Check In"}</button></td>
@@ -83,8 +90,8 @@
       let count = 0;
 
       if (!isUnchecking) {
-        const input = prompt("How many people are checking in for " + name + "?", currentCount);
-        count = parseInt(input);
+       // const input = prompt("How many people are checking in for " + name + "?", currentCount);
+        const count = currentCount;
         if (isNaN(count) || count < 0) {
           alert("Invalid number");
           return;
