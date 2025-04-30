@@ -126,7 +126,6 @@
         border: 1px solid #ccc;
         border-radius: 8px;
         background: white;
-        padding: 10px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
       }
 
@@ -196,7 +195,7 @@
             const tr = document.createElement("tr");
             tr.className = row.checked_in === "yes" ? "checked-in" : "";
             tr.innerHTML = `
-              <td data-label="Name">${row.name}</td>
+              <td data-label="Name"><span style="font-weight: bold;">${row.name}</span></td>
               <td data-label="Email">${row.email}</td>
               <td data-label="Total Attendees"><input type="number" value="${row.attendees}" onchange="updateAttendee('${row.email}', 'attendees', this.value)"></td>
               <td data-label="Food Allergies">${row.allergy}</td>
