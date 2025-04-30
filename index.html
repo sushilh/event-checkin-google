@@ -73,7 +73,7 @@
             tr.innerHTML = `
               <td>${row.name}</td>
               <td>${row.email}</td>
-              <td>${row.attendees}</td>
+              <td><input type="number" value="${row.attendees}" onchange="updateAttendee('${row.email}', 'attendees', this.value)"></td>
               <td>${row.allergy}</td>
               <td><input type="number" value="${row.checked_in_count}" onchange="updateAttendee('${row.email}', 'checked_in_count', this.value)"></td>
               <td><button onclick="toggleCheckIn(this, '${row.email}', '${row.name}', ${row.checked_in_count})">${row.checked_in === "yes" ? "Uncheck" : "Check In"}</button></td>
@@ -90,8 +90,8 @@
       let count = 0;
 
       if (!isUnchecking) {
-       // const input = prompt("How many people are checking in for " + name + "?", currentCount);
-          count = currentCount;
+        const input = prompt("How many people are checking in for " + name + "?", currentCount);
+        count = parseInt(input);
         if (isNaN(count) || count < 0) {
           alert("Invalid number");
           return;
