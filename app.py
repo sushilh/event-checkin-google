@@ -13,7 +13,7 @@ SHEET_ID = "1L2ih057w37xAkgL2bkP600iYpDyj215R6ZDjXniLIao"
 
 creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 client = gspread.authorize(creds)
-sheet = client.open_by_key(SHEET_ID).sheet1
+sheet = client.open_by_key(SHEET_ID).worksheet("Sheet1")
 
 HEADERS = ['name', 'email', 'attendees', 'allergy', 'checked_in', 'checked_in_count']
 
