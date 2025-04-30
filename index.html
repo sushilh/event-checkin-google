@@ -26,6 +26,47 @@
       margin-bottom: 20px;
     }
 
+    #search {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .add-button {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 10px 16px;
+      background-color: #7D2248;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #add-form {
+      display: none;
+      max-width: 500px;
+      margin: 0 auto 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    #add-form input {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -116,6 +157,18 @@
 <body>
   <h2>JTSC Awards Banquet Check-In</h2>
   <div class="summary" id="swimmer-summary"></div>
+  <button class="add-button" onclick="toggleAddForm()">➕ Add Guest</button>
+
+  <div id="add-form">
+    <input type="text" id="guest-name" placeholder="Name">
+    <input type="email" id="guest-email" placeholder="Email">
+    <input type="number" id="guest-attendees" placeholder="Total Attendees">
+    <input type="text" id="guest-allergy" placeholder="Allergies (optional)">
+    <button onclick="addGuest()">Submit</button>
+  </div>
+
+  <input type="text" id="search" placeholder="Search by name..." onkeyup="searchTable()">
+
   <table>
     <thead>
       <tr>
@@ -179,6 +232,45 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email, type: type, value: value })
       }).then(() => loadAttendees());
+    }
+
+    function addGuest() {
+      const name = document.getElementById("guest-name").value;
+      const email = document.getElementById("guest-email").value;
+      const attendees = document.getElementById("guest-attendees").value;
+      const allergy = document.getElementById("guest-allergy").value;
+
+      if (!name || !email || !attendees) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      fetch("/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, attendees, allergy })
+      }).then(() => {
+        document.getElementById("guest-name").value = "";
+        document.getElementById("guest-email").value = "";
+        document.getElementById("guest-attendees").value = "";
+        document.getElementById("guest-allergy").value = "";
+        document.getElementById("add-form").style.display = "none";
+        loadAttendees();
+      });
+    }
+
+    function toggleAddForm() {
+      const form = document.getElementById("add-form");
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+
+    function searchTable() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const rows = document.getElementById("table-body").getElementsByTagName("tr");
+      for (let i = 0; i < rows.length; i++) {
+        const name = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+        rows[i].style.display = name.includes(input) ? "" : "none";
+      }
     }
 
     document.addEventListener("DOMContentLoaded", loadAttendees);
