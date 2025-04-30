@@ -211,9 +211,18 @@
         });
     }
 
-    function toggleCheckIn(button, email, currentCount) {
+    function toggleCheckIn(button, email, name, currentCount) {
       const isUnchecking = button.textContent === "Uncheck";
-      const count = currentCount;
+      let count = 0;
+
+      if (!isUnchecking) {
+        const input = prompt("How many people are checking in for " + name + "?", currentCount);
+        count = parseInt(input);
+        if (isNaN(count) || count < 0) {
+          alert("Invalid number");
+          return;
+        }
+      }
 
       fetch("/checkin", {
         method: "POST",
